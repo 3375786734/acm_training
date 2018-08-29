@@ -27,6 +27,8 @@ int main()
 		dep(i,N,1)pre[i]=min(pre[i+1],pre[i]);
 		int pl=1;
 		//pl++ at most N O(nlogn)
+		rep(i,1,N) ss.insert(i);
+		
 		rep(i,1,N){
 			while(pre[i]>pl){
 				ss.insert(vv[pl]);pl++;
@@ -35,7 +37,7 @@ int main()
 			ss.erase(vv[i]);
 		}
 		printf("%d",vv[1]);
-		rep(i,1,N)printf(" %d",vv[i]);
+		rep(i,2,N)printf(" %d",vv[i]);
 		printf("\n");
 	}
 }

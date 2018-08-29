@@ -26,20 +26,21 @@ void slove()
 {
 	scanf("%d",&N);
 	int ans=0;MEM(nn,0);
+//	printf("here\n");
 	rep(i,1,N){
 		scanf("%s",str);
 		int len=strlen(str);
 		int top=0,base=0;
-		MEM(ss,0);
 		for(int j=0;j<len;j++){
-			if(top>base&&ss[top-1]=='('&&str[i]==')')
-				top--;
+			if(top>base&&ss[top-1]=='('&&str[i]==')')top--;
 			else ss[top++]=str[i];
 		}
 		while(top>base){
 			if(ss[top-1]=='(')nn[i].l++;
 			else nn[i].r++;
+			top--;
 		}
+		printf("%d %d\n",nn[i].l,nn[i].r);
 		ans+=len-nn[i].r-nn[i].l;
 	}
 	sort(nn+1,nn+1+N,cmp);
@@ -54,7 +55,7 @@ void slove()
 int main()
 {
 	int T;
-	freopen("t.in","r",stdin);
+//	freopen("t.in","r",stdin);
 	scanf("%d",&T);
 	while(T--){
 		slove();
