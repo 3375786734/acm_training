@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
 const int maxn=2e5+100;
 int a[maxn];
 int main()
@@ -9,7 +10,7 @@ int main()
 	for(int i=1;i<=N;i++)
 		scanf("%d",&a[i]);
 	sort(a+1,a+1+N);
-	int mid=(N+1)/2,ans=a[mid]>s?a[mid]-s:s-a[mid];
+	ll mid=(N+1)/2,ans=a[mid]>s?a[mid]-s:s-a[mid];
 //	printf("ans %d\n",s);
 		if(a[mid]>s){
 			for(int i=1;i<mid;i++)
@@ -19,5 +20,5 @@ int main()
 			for(int i=mid+1;i<=N;i++)
 				if(a[i]<s)ans+=s-a[i];
 		}
-	printf("%d\n",ans);
+	printf("%lld\n",ans);
 }

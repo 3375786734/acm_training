@@ -1,50 +1,47 @@
 #include <bits/stdc++.h>
 #define MEM(a,num) memset(a,num,sizeof(a))
-#define rep(i,a,b) for(int i=a;i<=b;i++)
 using namespace std;
+typedef vector<int> VV;
+typedef VV::iterator VI;
 const int maxn=4e5+100;
-int N;
-struct Eg{
-	int next,to;
-};
-Eg eg[maxn];
-int s[maxn],tag[maxn],head[maxn],cur,vis[maxn];
-void ag(int a,int b){
-	eg[cur]=(Eg){head[a],b};
-	head[a]=cur++;
-}
-void bfs(int now)
+int N,vis[maxn],a[maxn],rk[maxn];
+VV v[maxn];
+bool bfs()
 {
-	MEM(tag,0);
-	queue<int> q;
-	q.push(now);
-	tag[now]=1;vis[now]=1;
-	while(!q.empty()){
+	MEM(vis,0);
+	queue<int>q;
+	q.push(1);vis[1]=1;
+	int cnt=1;
+	while(!q.empty())
+	{
 		int fa=q.front();q.pop();
-		for(int i=head[fa];i!=-1;i=eg[i].next){
-			int id=eg[i].to;
-			if(vis[id]==0){
-				q.push(id);tag[id]=tag[fa]+1;
-				vis[id]=1;
+//		printf("now at %d %d\n",fa,a[]);
+		if(fa!=a[cnt++])return false;
+		for(VI it=v[fa].begin();it!=v[fa].end();it++){
+			if(!vis[*it]){
+				vis[*it]=1;
+				q.push(*it);
 			}
 		}
 	}
+	return true;
 }
 int main()
 {
 	scanf("%d",&N);
-	int a,b;
-	MEM(head,-1);cur=0;
-	rep(i,1,N-1){
-		scanf("%d%d",&a,&b);
-		ag(a,b);ag(b,a);
+	int c,d;
+	for(int i=1;i<=N-1;i++){
+		scanf("%d%d",&c,&d);
+		v[c].push_back(d);
+		v[d].push_back(c);
 	}
-	bfs(1);
-	int pre=0,ans=1;
-	rep(i,1,N){
-		scanf("%d",&a);
-		if(tag[a]<pre)ans=0;
-		pre=tag[a];
+	for(int i=1;i<=N;i++){
+		scanf("%d",&a[i]);
+//		if(a[i]!=1)v[fa[a[i]]].push_back(a[i]);
+		rk[a[i]]=i;
 	}
-	printf("%s\n",ans==0?"No":"Yes");
+	for(int i=1;i<=N;i++)
+		sort(v[i].begin(),v[i].end(),[&](int a,int b){return rk[a]<rk[b];});
+	if(bfs())printf("Yes\n");
+	else printf("No\n");
 }
