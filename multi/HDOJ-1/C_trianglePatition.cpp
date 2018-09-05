@@ -7,7 +7,10 @@
  */
 #include <bits/stdc++.h>
 using namespace std;
-
+const int maxn=;
+typedef pair<int,int> PP;
+typedef map<int,int> MM;
+MM mm[maxn];
 int main()
 {
 	int T;
@@ -15,8 +18,10 @@ int main()
 	while(T--)
 	{
 		scanf("%d",&N);
-		for(int i=1;i<=N;i++)
+		for(int i=1;i<=N;i++){
 			scanf("%d%d",&a,&b);
-
+			mm[a]=b;
+		}
+		
 	}	
 }

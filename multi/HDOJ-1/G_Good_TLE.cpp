@@ -9,26 +9,28 @@ using namespace std;
 typedef long long ll;
 const int maxn=1e5+100;
 const int mod=1e9+7;
+const int inv2 = 500000004;
 ll N;
 ll gg(ll x){
 	if(x<=1)return x;
 	else return gg(x/2)+x;
 }
+
 //O(\log^2 N)
 ll bsrch(ll N){
 	ll l=(N/2)-30,r=(N/2)+30,ans=-1;
 	while(l<=r){
 		ll mid=(l+r)/2;
 //		printf("now at %lld\n",mid);
-		if(gg(mid)>=N){
-			ans=mid;r=mid-1;
+		if(gg(mid)<=N){
+			l=mid+1;ans=mid;
 		}
-		else l=mid+1;
+		else r=mid-1;
 	}
 	return ans;
 }
 ll sum(ll s,ll t,ll k){
-	return  ((s+t)*k/2)%mod;
+	return  (((s+t)%mod*k%mod)*inv2%mod)%mod;
 }
 int main()
 {
@@ -42,7 +44,7 @@ int main()
 			printf("%d\n",N==0?1:2);
 			continue;
 		}
-		ll up=bsrch(N),res=N-gg(--up);
+		ll up=bsrch(N),res=(N-gg(up)+mod)%mod;
 //		printf("up %lld res %lld\n",up,res);
 		ll flag=0,ans=1;
 		for(int i=0;;i++){
@@ -52,9 +54,9 @@ int main()
 		for(ll i=0;i<=flag;i++){
 			ll b1=1<<i,b2=b1*2,uu=(up+b1)/b2;
 //			printf("i %d uu %lld\n",i,uu);
-			ans=(ans+(i+1)*sum(b1,b2*uu-b1,uu)%mod)%mod;
+			ans=(ans+((i+1)%mod*sum(b1,b2*uu-b1,uu)%mod)%mod)%mod;
 		}
-		ans=(ans+(up+1)*res%mod)%mod;
+		ans=(ans+((up+1)%mod*res%mod)%mod)%mod;
 		printf("%lld\n",ans%mod);
 	}
 }
