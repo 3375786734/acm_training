@@ -1,3 +1,9 @@
+/*
+ *正向的思路:考虑到当前更新到i,如果前面有x比他小,y比他大的,那么每一个都要减去当前的y值,如果前面有x比他大的,y比小的,都要减去当前的x值,如果另外两种包含关系直接使用排序的关系处理掉即可,现在的问题就转化为了:
+ 	怎么样在(logN)^2的时间内实现单点修改以及查询在一个序列中比某个数h大的数的个数
+	可以使用树套树实现,或者见segment tree的做法.
+	注意一个思想误区,认为前面后面都要统计,这样后面的会被统计两次,是错误的.
+ */
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn=;
@@ -8,57 +14,6 @@ struct Node{
 		else return false;
 	}
 };
-vector<Node> vv;
-bool cid(Node a,Node b){
-	return a.id<b.id;
-}
-bool cx(Node a,Node b){
-	return a.x<b.x;
-}
-set<Node> nn;
-
-int lowbit(int x)
-{
-    return x&(-x);
-}
-
-int sum(int x)
-{
-    int ret=0;
-    while(x>0)
-    {
-        ret+=C[x];
-        x-=lowbit(x);
-    }
-    return ret;
-}
-
-void add(int x,int d)
-{
-    while(x<=n)
-    {
-        C[x]+=d;
-        x+=lowbit(x);
-    }
-}
-
-struct node
-{
-    int id,num;
-    bool operator < (const node &other) const
-    {
-        return num < other.num;
-    }
-}a[maxn];
-struct note
-{
-    int l,r,id,value;
-    bool operator < (const note &other)const
-    {
-        return value <other.value;
-    }
-}b[maxn];
-
 int main()
 {
 	int N;
