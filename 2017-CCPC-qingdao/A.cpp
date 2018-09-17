@@ -28,7 +28,7 @@ int main()
 			else d[i]=tt[a]-1-b%M;
 			sum+=d[i];
 		}
-		sort(d,d+P);
+		sort(d+1,d+P+1);
 		rep(i,1,P)
 			ans=min(ans,sum+1ll*M*(i-1)-P*d[i]);
 		printf("%lld\n",ans);
