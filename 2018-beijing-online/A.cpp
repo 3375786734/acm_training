@@ -12,7 +12,7 @@ typedef pair<int,int > PP;
 //int G[maxn][manx][7];
 char str[maxn][maxn];
 int N,M;
-int vis[2][maxn][maxn][7],f[maxn][maxn][7];
+int vis[maxn][maxn][7],f[maxn][maxn][7];
 PP S,T;
 struct Node{
 	int x,y,state,g,h,pre;
@@ -40,19 +40,15 @@ int slove()
 	Node ss=(Node){S.f,S.s,0,0,Abs(S.f-T.f)+Abs(S.s-T.s),0};
 	qq.push(ss);
 	MEM(vis,0);
-	vis[0][ss.y][ss.x][ss.state]=1;
 	f[ss.y][ss.x][0]=ss.g+ss.h;
 	int ans=1e9;
 	MEM(f,0x3f3f3f);
 	while(!qq.empty()){
 		Node fa=qq.top();qq.pop();
-		vis[0][fa.y][fa.x][fa.state]=0;
-		vis[1][fa.y][fa.x][fa.state]=1;
-		printf("now at x %d y %d state %d depth %d\n",fa.x,fa.y,fa.state,fa.g);
-		if(fa.x==T.f&&fa.y==T.s){
-			ans=min(ans,fa.g);
-			//break;
-		}
+		if(vis[1][fa.y][fa.x][fa.state]==1)continue;
+		vis[fa.y][fa.x][fa.state]=1;//in closed
+//		printf("now at x %d y %d state %d depth %d\n",fa.x,fa.y,fa.state,fa.g);
+		if(fa.x==T.f&&fa.y==T.s)ans=min(ans,fa.g);
 		for(int i=0;i<4;i++){
 			int nx=fa.x+dx[i],ny=fa.y+dy[i];
 			if(check(nx,ny,fa.state)){
@@ -65,6 +61,7 @@ int slove()
 					cn.state--;
 				}
 				if(str[ny][nx]=='P')cn.pre=1;
+				/*
 				if(vis[0][cn.y][cn.x][cn.state]==1){   //in open
 					if(f[cn.y][cn.x][cn.state]>cn.h+cn.g){
 						qq.push(cn);
@@ -84,11 +81,20 @@ int slove()
 					vis[0][cn.y][cn.x][cn.state]=1;
 					vis[1][cn.y][cn.x][cn.state]=0;
 				}
+				*/
+				if(vis[cn.y][cn.x][cn.state]==0){  	//not in closed
+					qq.push(cn);
+					f[cn.y][cn.x][cn.state]=cn.h+cn.g;
+				}
+				else if(f[cn.y][cn.x][cn.state]>cn.h+cn.g){  //if in closed but better than before
+							qq.push(cn);
+	   						f[cn.y][cn.x][cn.state]=cn.h+cn.g;
+							vis[cn.y][cn.x][cn.state]=0;   //change to open;
+				}
 			}
 		}
 	}
 	return ans==1e9?-1:ans;
-	
 }
 int main()
 {
