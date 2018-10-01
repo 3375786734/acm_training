@@ -1,12 +1,13 @@
 /*
  *idea:首先假设所有的墙都建好了,现在由于每两个点之间只有一条路径,因此可以想到,所有的点到点之间的路径形成了一颗树,现在建立一颗最大生成树即可,并用LCA询问深度,只需要dep[u]+dep[v]-2*dep[lca(u,v)]即可
+ *trick:设置一个编码器,而不是一个一个的写坐标变换.
  */
 #include <bits/stdc++.h>
 #define MEM(a,num) memset(a,num,sizeof(a))
 #define rep(i,a,b) for(int i=a;i<=b;i++)
 using namespace std;
-const int maxn=505;
-const int maxm=5e5+100;
+const int maxn=600;
+const int maxm=6e5+100;
 typedef long long ll;
 typedef pair<int,int> PP;
 typedef vector<int>::iterator VI;
@@ -19,7 +20,7 @@ struct Eg{
 };
 Eg eg[maxm];
 struct LCA{
-	int dep[maxn*maxn],anc[maxn*maxn][21],LOGN,maxdep;
+	int dep[maxn*maxn],anc[maxn*maxn][23],LOGN,maxdep;
 	void init(){
 //		anc[j][i]=anc[anc[j][i-1]][i-1];
 		MEM(anc,-1);
@@ -54,7 +55,6 @@ struct LCA{
 				if(anc[i][j-1]!=-1)
 					anc[i][j]=anc[anc[i][j-1]][j-1];
 	}
-
 	//get maxdep,dep,and anc[v][0]
 	void dfs(int now){
 		if(anc[now][0]!=-1)
@@ -83,11 +83,11 @@ void build()
 	for(int i=1;i<=M*N;i++)fa[i]=i;
 	sort(eg,eg+egnum,[&](Eg a,Eg b){return a.w>b.w;});
 //	rep(i,0,egnum)printf("eg %d %d %lld\n",eg[i].u,eg[i].v,eg[i].w);
-	for(int i=0;i<egnum&&sz<N*M;i++){
+	for(int i=0;i<egnum;i++){
 		int a=eg[i].u,b=eg[i].v,ra=fd(a),rb=fd(b);
 		if(ra==rb)continue;
 		else{
-//			printf("add %d %d\n",a,b);
+			//printf("add %d %d\n",a,b);
 			un(ra,rb);
 			v[a].push_back(b);
 			v[b].push_back(a);
@@ -107,23 +107,34 @@ int index(int x,int y){
 }
 int main()
 {
+	//freopen("t.in","r",stdin);
 	cin>>N>>M;
 	char dd,rr;
 	ll cd,rd,Q;
-	ll ans=0;
 	egnum=0;
 	for(int i=0;i<N;i++)
 		for(int j=0;j<M;j++){
+			for(int k=0;k<2;k++){
+				cin>>dd>>cd;
+				if(dd!='X'){
+					int id=i*M+j+1,idr=i*M+j+1+1,idd=(i+1)*M+j+1;
+					if(dd=='R')eg[egnum++]=(Eg){id,idr,cd};
+					if(dd=='D')eg[egnum++]=(Eg){id,idd,cd};
+				}
+			}
+			/*
 			int id=i*M+j+1,idr=i*M+(j+1)+1,idd=(i+1)*M+j+1;
 			cin>>dd>>cd>>rr>>rd;
+			if(dd=='R'||rr=='D')swap(cd,rd);
 			if(rr!='X')eg[egnum++]=(Eg){id,idr,rd};
 			if(dd!='X')eg[egnum++]=(Eg){id,idd,cd};
+			*/
 		}
 	build();
 	tt.init();
 	tt.dfs(1);
 	tt.Doubling();
-	scanf("%d",&Q);
+	cin>>Q;
 	int x,y,z,w;
 	while(Q--){
 		cin>>x>>y>>z>>w;

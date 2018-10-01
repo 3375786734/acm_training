@@ -1,97 +1,86 @@
 #include <bits/stdc++.h>
 using namespace std;
+const int maxn=100;
 typedef pair<int,int> PP;
-set<int> ss[10][10];
-int ans;
-PP ps[50];
 char str[10][10];
-bool check(int cx,int cy)
+PP ps[maxn];
+int vis[10][10],bit[5][5][5],ans;
+bool check(int cx,int cy,int (*num)[5])
 {
-	int ok1=0,ok2=0,s1=0,s2=0,s3=0,ok3=0;
+	int vv[3][5];
+	for(int i=0;i<3;i++)
+		for(int j=0;j<5;j++)vv[i][j]=0;
+	for(int i=0;i<2;i++)
+		for(int j=0;j<4;j++)
+			if(i==0)vv[i][num[cy][j]]++;
+			else vv[i][num[j][cx]]++;
+	/*
 	for(int i=0;i<4;i++)
-		if(str[cy][i]=='*')ok1=1;
-		else s1+=str[cy][i]-'0';
-	if(ok1==0&&s1==10)ok1=1;
-	for(int i=0;i<4;i++)
-		if(str[i][cx]=='*')ok2=1;
-		else s2+=str[i][cx]-'0';
-	for(int j=cx/2*2;j<cx/2*2+2;j++)
-		for(int i=cy/2*2;i<cy/2*2+2;i++)
-			if(str[i][j]=='*')ok3=1;
-			else s3+=str[i][j]-'0';
-	if(ok2==0&&s2==10)ok2=1;
-	if(ok3==0&&s3==10)ok3=1;
-	return ok1&&ok2&&ok3;
+		printf("at %d\n",num[cy][i]);
+	*/
+	for(int i=cx/2*2;i<cx/2*2+2;i++)
+		for(int j=cy/2*2;j<cy/2*2+2;j++)
+			vv[2][num[j][i]]++;
+	for(int i=0;i<3;i++)
+		for(int j=1;j<=4;j++)
+			if(vv[i][j]>1||(vv[i][j]==0&&vv[i][0]==0)){
+				//printf("now %d",i);
+				return false;
+			}
+	return true;
 }
-void dfs(int dep){
+void dfs(int dep,int (*num)[5])
+{
+	int cy=ps[dep].first,cx=ps[dep].second;
+	//printf("here %d %d %d\n",cx,cy,dep);
 	if(dep==-1){
-		ans=1;
+		ans=0;
+		for(int i=0;i<4;i++)
+			for(int j=0;j<4;j++)
+				str[i][j]=num[i][j]+'0';
 		return;
 	}
-	int cy=ps[dep].first,cx=ps[dep].second;
 	//if(vis[cy][cx]==1)return ;
 	//vis[cy][cx]=1;
-	//printf("now %d %d\n",cx,cy);
-	for(set<int>::iterator si=ss[cy][cx].begin();si!=ss[cy][cx].end();si++){
-		PP tmp[18];
-		int sz=0;
-		str[cy][cx]=(*si)+'0';
-		for(int i=0;i<4;i++)
-			if(ss[cy][i].count(*si)&&i!=cx){
-				tmp[sz++]=PP(cy,i);
-			//if(cy==1&&i==1&&*si==2)printf("here %d %d\n",cx,cy);
-				ss[cy][i].erase(*si);
-			}
-		for(int i=0;i<4;i++)
-            if(ss[i][cx].count(*si)&&i!=cy){
-                tmp[sz++]=PP(i,cx);
-                ss[i][cx].erase(*si);
-			//if(cy==1&&i==1&&*si==2)printf("herei %d %d\n",cx,cy);
-            }
-		if(check(cx,cy))dfs(dep-1);
+	for(int i=1;i<=4;i++){
+//		printf("here %d %d %d\n",cx,cy,dep);
+		if(bit[i][cy][cx])continue;
+		num[cy][cx]=i;
+		if(check(cx,cy,num))dfs(dep-1,num);
 		if(ans==1)return;
-		for(int i=0;i<sz;i++){
-			int xx=tmp[i].first,yy=tmp[i].second;
-			//if(xx==1&&yy==1&&*si==2)printf("here %d %d\n",cx,cy);
-			ss[tmp[i].first][tmp[i].second].insert(*si);
-		}
+		num[cy][cx]=0;
 	}
 }
 int main()
 {
 	int T,cas=1;
-	freopen("t.in","r",stdin);
+	//freopen("t.in","r",stdin);
 	scanf("%d",&T);
 	while(T--)
 	{
-		int cnt=0;
-		ans=0;
-		//memset(vis,0,sizeof(vis));
+		int cnt=0;	
+		int num[5][5];
+		memset(num,0,sizeof(num));
+		memset(bit,0,sizeof(bit));
 		for(int i=0;i<4;i++)
 			scanf("%s",str[i]);
 		for(int i=0;i<4;i++)
-			for(int j=0;j<4;j++){
-				ss[i][j].clear();
-				for(int k=1;k<=4;k++)ss[i][j].insert(k);
-		}
-		for(int i=0;i<4;i++)
-			for(int j=0;j<4;j++){
+			for(int j=0;j<4;j++)
 				if(str[i][j]=='*')ps[cnt++]=PP(i,j);
-				else {
-					int nn=str[i][j]-'0';
-					//vis[i][j]=1;
-					for(int k=0;k<4;k++)ss[i][k].erase(nn);
-					for(int k=0;k<4;k++)ss[k][j].erase(nn);
+		for(int i=0;i<4;i++)
+			for(int j=0;j<4;j++)
+				if(str[i][j]!='*'){
+					int nn= str[i][j]-'0';
+					for(int k=0;k<4;k++)bit[nn][i][k]=bit[nn][k][j]=1;
+					num[i][j]=nn;
 				}
-			}
 		printf("Case #%d:\n",cas++);
-		dfs(cnt-1);
-		//printf("ans %d\n",ans);
+		memset(vis,0,sizeof(vis));
+		dfs(cnt-1,num);
 		for(int i=0;i<4;i++){
-            for(int j=0;j<4;j++)
-            printf("%c",str[i][j]);
-            printf("\n");
-        }
-		//printf("Case #%d: %s\n",cas++,ans==1?"Can kill in one move!!!":"Can not kill in one move!!! ");
+			for(int j=0;j<4;j++)
+				printf("%c",str[i][j]);
+			printf("\n");
+		}
 	}
 }

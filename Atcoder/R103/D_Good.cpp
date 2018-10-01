@@ -9,31 +9,33 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn=5e5;
+typedef long long ll;
 int N,x[maxn],y[maxn];
 char alph[5]={'R','L','U','D'};
 int dx[5]={1,-1,0,0};
 int dy[5]={0,0,1,-1};
-int ans[50],length[50];
-int aa(int a){
+int ans[50];
+ll length[50];
+ll aa(ll a){
 	if(a<0)return -a;
 	else return a;
 }
-bool check(int cx,int cy,int ml){
+bool check(ll cx,ll cy,ll ml){
 //	printf("cx %d cy %d num %d\n",cx,cy,ml);
 	if(aa(cx)+aa(cy)<=(1<<ml)-1)return true;
 	else return false;
 }
 void dfs(int id,int xx,int yy)
 {
-	int cx=0,cy=0;
+	ll cx=xx,cy=yy;
 	for(int j=id;j>=1;j--)
 	{
 //		printf("cx %d cy %d\n",cx,cy);
 		for(int i=0;i<4;i++){
-			int nx=cx+length[j]*dx[i];
-			int ny=cy+length[j]*dy[i];
-			if(check(xx-nx,yy-ny,j-1)){
-				ans[j]=i;
+			ll nx=cx+length[j]*dx[i];
+			ll ny=cy+length[j]*dy[i];
+			if(check(nx,ny,j-1)){
+				ans[j]=i^1;
 				cx=nx;cy=ny;
 				break;
 			}
@@ -43,8 +45,10 @@ void dfs(int id,int xx,int yy)
 
 int main()
 {
+	freopen("t.in","r",stdin);
 	scanf("%d",&N);
-	int pre=0,flag=0,ok=1;
+	int flag=0,ok=1;
+	ll pre=0;
 	for(int i=1;i<=N;i++){
 		scanf("%d%d",&x[i],&y[i]);
 		pre=max(pre,aa(x[i])+aa(y[i]));
@@ -56,10 +60,10 @@ int main()
 
 	if(ok==0)printf("-1\n");
 	else{
-		int cx,cy;
+		ll cx,cy;
 		if(flag==1){
 			printf("31\n");
-			for(int i=1;i<=31;i++)printf("%d%c",length[i]=(1<<(i-1)),i==31?'\n':' ');
+			for(int i=1;i<=31;i++)printf("%lld%c",length[i]=(1<<(i-1)),i==31?'\n':' ');
 			for(int j=1;j<=N;j++){
 				cx=cy=0;
 				dfs(31,x[j],y[j]);
@@ -68,23 +72,22 @@ int main()
 					cx+=length[i]*dx[ans[i]];
 					cy+=length[i]*dy[ans[i]];
 				}
-				printf("ps %d %d\n",cx,cy);
+				//printf("ps %lld %lld\n",cx,cy);
 				printf("\n");
 			}
 		}
 		else {
 			printf("32\n");
-			for(int i=1;i<=32;i++)printf("%d%c",i==32?length[i]=1:length[i]=(1<<(i-1)),i==32?'\n':' ');
+			for(int i=1;i<=32;i++)printf("%lld%c",i==32?length[i]=1:length[i]=(1<<(i-1)),i==32?'\n':' ');
 			for(int j=1;j<=N;j++){	
 				cx=cy=0;
 				dfs(32,x[j],y[j]);
-				int cx=0,cy=0;
 				for(int i=1;i<=32;i++){
 					printf("%c",alph[ans[i]]);
-					cx+=length[i]*dx[ans[i]];
-					cy+=length[i]*dy[ans[i]];
+					cx+=(ll)length[i]*dx[ans[i]];
+					cy+=(ll)length[i]*dy[ans[i]];
 				}
-				printf("cx %d cy %d\n",cx,cy);
+				//printf("cx %lld cy %lld\n",cx,cy);
 				printf("\n");
 			}
 		}
