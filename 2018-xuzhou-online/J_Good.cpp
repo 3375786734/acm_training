@@ -6,7 +6,7 @@
 #define MEM(a,num) memset(a,num,sizeof(a))
 #define rep(i,a,b) for(int i=a;i<=b;i++)
 using namespace std;
-const int maxn=600;
+const int maxn=510;
 const int maxm=6e5+100;
 typedef long long ll;
 typedef pair<int,int> PP;
@@ -20,7 +20,7 @@ struct Eg{
 };
 Eg eg[maxm];
 struct LCA{
-	int dep[maxn*maxn],anc[maxn*maxn][23],LOGN,maxdep;
+	int dep[maxn*maxn],anc[maxn*maxn][26];
 	void init(){
 //		anc[j][i]=anc[anc[j][i-1]][i-1];
 		MEM(anc,-1);
@@ -28,37 +28,38 @@ struct LCA{
 		maxdep=0;
 	}
 	int lca(int a,int b){
-		int LOGN=(int)(log(maxdep*1.0)/log(2.0));
+		//int LOGN=(int)(log(maxdep*1.0)/log(2.0));
+		int LOGN=0;
+		while((1<<LOGN)<=N*M)LOGN++;
+		LOGN--;
 		//make sure dep[a]<dep[b];
 		if(dep[a]>dep[b])swap(a,b);
 		//then up b until a and b have almost the same dep;
 		for(int i=LOGN;i>=0;i--)
-			if(anc[b][i]!=-1&&dep[anc[b][i]]>=dep[a])
+			if(dep[b]-(1<<i)>=dep[a])
 				b=anc[b][i];
 		if(a==b) return a;
 		for(int i=LOGN;i>=0;i--){
 			//up it until we get the same anc;
-			if(anc[a][i]!=anc[b][i]){
+			if(anc[a][i]!=-1&&anc[a][i]!=anc[b][i]){
 				a=anc[a][i];
 				b=anc[b][i];
 			}
 		}
 		return anc[a][0];
 	}
-
 	//get anc[v][1....LOGN]
 	void Doubling()
 	{
-		int LOGN=(int)(log(maxdep*1.0)/log(2.0));
-		for(int j=1;j<=LOGN;j++)
+		//int LOGN=(int)(log(N*M*1.0)/log(2.0));
+		for(int j=1;(1<<j)<=N*M;j++)
 			for(int i=1;i<=N*M;i++)
 				if(anc[i][j-1]!=-1)
 					anc[i][j]=anc[anc[i][j-1]][j-1];
 	}
 	//get maxdep,dep,and anc[v][0]
 	void dfs(int now){
-		if(anc[now][0]!=-1)
-			maxdep=max(maxdep,dep[now]=dep[anc[now][0]]+1);
+		dep[now]=dep[anc[now][0]]+1;
 		for(VI vi=v[now].begin();vi!=v[now].end();vi++){
 			int id = *vi;
 			if(id==anc[now][0])continue;
@@ -82,7 +83,6 @@ void build()
 	int sz=0;
 	for(int i=1;i<=M*N;i++)fa[i]=i;
 	sort(eg,eg+egnum,[&](Eg a,Eg b){return a.w>b.w;});
-//	rep(i,0,egnum)printf("eg %d %d %lld\n",eg[i].u,eg[i].v,eg[i].w);
 	for(int i=0;i<egnum;i++){
 		int a=eg[i].u,b=eg[i].v,ra=fd(a),rb=fd(b);
 		if(ra==rb)continue;
@@ -94,7 +94,6 @@ void build()
 			sz++;
 		}
 	}
-//	printf("now %d %d\n",egnum,sz);
 }
 
 ll slove(int a,int b){
@@ -112,23 +111,16 @@ int main()
 	char dd,rr;
 	ll cd,rd,Q;
 	egnum=0;
-	for(int i=0;i<N;i++)
-		for(int j=0;j<M;j++){
+	for(int i=1;i<=N;i++)
+		for(int j=1;j<=M;j++){
 			for(int k=0;k<2;k++){
 				cin>>dd>>cd;
 				if(dd!='X'){
-					int id=i*M+j+1,idr=i*M+j+1+1,idd=(i+1)*M+j+1;
+					int id=index(i,j),idr=index(i,j+1),idd=index(i+1,j);
 					if(dd=='R')eg[egnum++]=(Eg){id,idr,cd};
 					if(dd=='D')eg[egnum++]=(Eg){id,idd,cd};
 				}
 			}
-			/*
-			int id=i*M+j+1,idr=i*M+(j+1)+1,idd=(i+1)*M+j+1;
-			cin>>dd>>cd>>rr>>rd;
-			if(dd=='R'||rr=='D')swap(cd,rd);
-			if(rr!='X')eg[egnum++]=(Eg){id,idr,rd};
-			if(dd!='X')eg[egnum++]=(Eg){id,idd,cd};
-			*/
 		}
 	build();
 	tt.init();
