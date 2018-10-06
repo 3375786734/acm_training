@@ -68,7 +68,7 @@ double solve()
 		ans = max(ans,dp[2][1]);
 		//printf("here ans %lf\n",ans);
 		for(int i=1;i<tmp.sz;i++)
-			for(int j=1;j<i;j++){
+			for(int j=2;j<i;j++){
 				if(check(tmp.node[i]-ori,tmp.node[j]-ori,O+1,i)){
 					for(int k=1;k<j;k++)
 						dp[i][j] = max(dp[i][j],S(tmp.node[i],tmp.node[j],nn[O])+dp[j][k]);

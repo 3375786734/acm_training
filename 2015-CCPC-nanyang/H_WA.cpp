@@ -1,3 +1,6 @@
+/*
+ *全局变量修改造成的惨案!
+ */
 #include <bits/stdc++.h>
 using namespace std;
 typedef pair<int,int> PP;
