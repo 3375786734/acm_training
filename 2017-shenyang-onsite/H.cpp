@@ -5,5 +5,11 @@ using namespace std;
 const int maxn=;
 int main()
 {
-	
+	int T;
+	scanf("%d",&T);
+	while(T--)
+	{
+		scanf("%d%d%d%d",&Mo,&Re,&Mi,&Tra);
+		
+	}
 }
