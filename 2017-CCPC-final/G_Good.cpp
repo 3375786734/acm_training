@@ -9,7 +9,7 @@
 #include <bits/stdc++.h>
 #define rep(i,a,b) for(int i=a;i<=b;i++)
 using namespace std;
-const int maxn=2010;
+const int maxn=2181;
 //typedef pair<int,int> PP;
 struct PP{
 	int x,y;
@@ -28,40 +28,44 @@ PP ss[maxn];
 int main()
 {
 	int  T,cas=1;
-	freopen("t.in","r",stdin);
+	//freopen("t.in","r",stdin);
 	scanf("%d",&T);
 	while(T--)
 	{
 		scanf("%d%d%d",&N,&M,&K);
 		memset(dp,0,sizeof(dp));
-		memset(pre,0,sizeof(pre));
 		int xx,yy,sz=0,ans=0;
+
 		rep(i,1,M){
 			scanf("%d%d",&xx,&yy);
-			ss[++sz]=PP(xx,yy);
+			ss[++sz] = PP(xx,yy);
 		}
 		sort(ss+1,ss+sz+1);
 		sz=unique(ss+1,ss+1+sz)-ss-1;
-		printf("%d\n",sz);
-		for(int i=1;i<=sz;i++)
-			printf("%d %d\n",ss[i].x,ss[i].y);
-		for(int i=1;i<=K;i++){
+
+		for(int k=1;k<=K;k++){
 			int pos=0,maxx=0;
 			for(int j=1;j<=sz;j++){
 				while(pos<j&&ss[pos].y<ss[j].x){
+					maxx=max(maxx,dp[pos][k-1]);
 					pos++;
-					maxx=max(maxx,dp[pos][i-1]);
 				}
-				if(pos<j)dp[j][i]=dp[j-1][i-1]+ss[i].y-ss[pos].y;
-				else dp[j][i]=dp[j-1][i-1]+maxx;
+				//我们需要证明,如果有多个交叠的,一定是第一个交叠的最优
+				//因为不存在包含关系,因此如果有多个交叠,那么这些交叠的一定交叠(因为是按l排序的).
+				//因为除第一个交叠的生成了后面交叠的最优值,那么后面的值不会比第一个优
+				if(pos<j)dp[j][k]=dp[pos][k-1]+ss[j].y-ss[pos].y;
+				dp[j][k]=max(dp[j][k],maxx+ss[j].y-ss[j].x+1);
 			}
 		}
 		/*
+		for(int i=1;i<=sz;i++)
+			for(int j=1;j<=K;j++)
+				printf("dp[%d][%d]:%d %d\n",i,j,dp[i][j]);
 		for(PP si:ss)
 			printf("%d %d\n",si.x,si.y);
 		*/
 		for(int i=1;i<=M;i++)
-				ans=max(dp[i][K],ans);
+			ans=max(dp[i][K],ans);
 		printf("Case #%d: %d\n",cas++,ans);
 	}
 }

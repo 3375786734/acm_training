@@ -21,7 +21,7 @@ int main()
 	while(pos>=1&&h[pos]>minx){
 		sum=0;ans++;
 		int pre=pos;
-		while(sum<=K){
+		while(pre>=1&&sum<=K){
 			pos=pre;
 			while(pre>=1&&h[pre]==h[pos])pre--;
 			sum+=(N-pre)*(h[pos]-h[pre]);
