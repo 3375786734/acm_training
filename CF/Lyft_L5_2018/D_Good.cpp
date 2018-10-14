@@ -1,5 +1,6 @@
 /*
  *trick,将array不用的数标记出来,空间重用
+ *pow会有精度损失,求解方法见check函数,先-.1然后不断遍历
  */
 #include <bits/stdc++.h>
 #define rep(i,a,b) for(int i=a;i<=b;i++)
@@ -9,22 +10,16 @@ const double eps=1e-2;
 const int mod=998244353;
 typedef long long ll;
 ll a[maxn],oth[maxn];
-ll cb(int a){
-	return a*a*a;
-}
-ll sq(ll a){
-	return (ll)a*a;
-}
-bool issqrt(ll a){
-	if(a<=1)return false;
-	if(fabs(sq(pow(a,1.0/2))-a)<eps)return true;
-	else return false;
-}
-bool iscbrt(ll a){
-	if(a<=1)return false;
-	//printf("%lf",pow(a,1.0/3));
-	if(fabs(cb(pow(a,1.0/3))-a)<eps)return true;
-	else return false;
+ll check(ll a,int op){
+	ll rt=pow(a,1.0/op)-.1;
+	while(1){
+		ll res=1;
+		for(int i=0;i<op;i++)
+			res*=rt;
+		if(res>a)return false;
+		else if(res==a)return rt;
+		else rt++;
+	}
 }
 int main()
 {	
@@ -36,19 +31,11 @@ int main()
 	rep(i,1,N)scanf("%lld",&a[i]);
 	ll ans=1;
 	rep(i,1,N){
+		ll x;
 		if(a[i]==1)continue;
-		if(issqrt(a[i])){
-			if(issqrt(sqrt(a[i]))){
-				mm[(ll)pow(a[i],1.0/4)]+=4;
-			}
-			else{
-				mm[(ll)pow(a[i],1.0/2)]+=2;
-				//printf("here %lld",a[i]);
-			}
-		}
-		else if(iscbrt(a[i])){
-			mm[(ll)pow(a[i],1.0/3)]+=3;
-		}
+		if(x=check(a[i],4))mm[x]+=4;
+		else if(x=check(a[i],2))mm[x]+=2;
+		else if(x=check(a[i],3))mm[x]+=3;
 		else oth[sz++]=a[i];
 	}
 	for(int i=0;i<sz;i++)
