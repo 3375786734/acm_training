@@ -4,5 +4,7 @@ const int maxn=;
 int N,M;
 int main()
 {
-
+	int N;
+	scanf("%d",&N);
+	
 }
