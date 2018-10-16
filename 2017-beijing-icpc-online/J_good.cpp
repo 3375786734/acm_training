@@ -20,7 +20,8 @@ int main()
 	sort(a+1,a+1+N);
 	MEM(dp,0x3f3f3f);
 	for(int i=1;i<=N;i++)
-		dp[i][i][1]=0;
+		for(int j=i;j<=N;j++)
+			dp[i][j][j-i+1]=0;
 	for(int len = 1;len <= N;len++){
 		for(int s=1;s+len-1<=N;s++){
 			for(int j=s+1;j<s+len-1;j++)
