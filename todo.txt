@@ -3,3 +3,8 @@
 2.2018-multi
 
 3.2017-ccpc
+
+
+计算几何:凸包练习,学习
+可持久化数据结构:persistence union find
+
