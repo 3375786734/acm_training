@@ -24,11 +24,7 @@ void ag(int a,int b,int c){
 }
 bool solve(int S)
 {
-	//MEM(vis,0);MEM(dis,0x3f3f3f);MEM(cntv,0);
-	rep(i,0,N){
-		cntv[i]=vis[i]=0;
-		dis[i]=1e9+2000;
-	}
+	MEM(vis,0);MEM(dis,0x3f3f3f);MEM(cntv,0);
 	vis[S]=1;dis[S]=0;c[S]=1;
 	queue<int> q;
 	q.push(S);
