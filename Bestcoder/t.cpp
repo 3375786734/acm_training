@@ -1,19 +1,24 @@
 #include <bits/stdc++.h>
 #define MEM(a,num) memset(a,num,sizeof(a))
+#define rep(i,a,b) for(int i=a;i<=b;i++)
 using namespace std;
+typedef pair<double,double> PP;
+typedef long long ll;
 const int maxn=1e5+100;
-const double inf=1e9;
+const ll inf= 2e10;
+map<PP,int>  ss;
 int N;
 struct Point{
-	double x,y;
-	Point(double x=0,double y=0):x(x),y(y){}
+	ll x,y;
+	int id;
+	Point(ll x=0,ll y=0,int id=0):x(x),y(y),id(id){}
 };
-Point pp[maxn];
-double sq(double x){
+Point pp[maxn],strip[maxn];
+ll sq(ll x){
 	return x*x;
 }
-double dist(Point a,Point b){
-	return sqrt(sq(a.x-b.x)+sq(a.y-b.y));
+ll dist(Point a,Point b){
+	return sq(a.x-b.x)+sq(a.y-b.y);
 }
 bool cmpy(Point a,Point b){
 	return a.y==b.y?a.x<b.x:a.y<b.y;
@@ -21,14 +26,15 @@ bool cmpy(Point a,Point b){
 bool cmpx(Point a,Point b){
 	return a.x==b.x?a.y<b.y:a.x<b.x;
 }
-double get_it(Point *pp,int l,int r,int &p,int &P){
-	double dis=inf;
+lle get_it(Point *pp,int l,int r,int &p,int &P){
+	lldis=inf;
 	for(int i=l;i<=r;i++)
 		for(int j=i+1;j<=r;j++)
 			if(dis>dist(pp[i],pp[j])){
-				p = i;P = j;
+				p = pp[i].id;P = pp[j].id;
 				dis = dist(pp[i],pp[j]);
 			}
+	//printf("res %lf\n",dis);
 	return dis;
 }
 double get_strip(Point *pp,int sz,int &p,int &P){
@@ -36,10 +42,11 @@ double get_strip(Point *pp,int sz,int &p,int &P){
 	double dis=inf;
 	for(int i=0;i<sz;i++)
 		for(int j=1;j<=7;j++)
-			if(dis>dist(pp[i],pp[i+j])){
-				p = i ; P = i+j;
+			if(i+j<sz&&dis>dist(pp[i],pp[i+j])){
+				p = pp[i].id ; P = pp[i+j].id;
 				dis = dist(pp[i],pp[i+j]);
 			}
+	//printf("strip here %lf\n",dis);
 	return dis;
 }
 double fd_pair(Point *pp,int l,int r,int &p,int &P)
@@ -52,30 +59,43 @@ double fd_pair(Point *pp,int l,int r,int &p,int &P)
 	if(dl>=dr)p = pr,P = Pr;
 	else p=pl,P = Pl;
 	double mx = pp[mid].x;int sz=0;
-	Point strip[maxn];
 	for(int i=l;i<=r;i++)
-		if(fabs(pp[i].x-mx)<=d)strip[sz++] = i;
+		if(fabs(pp[i].x-mx)<=d)strip[sz++] = pp[i];
 	int pmid,Pmid;
+	/*
+	rep(i,0,sz-1)
+		printf("ss %lf %lf\n",strip[i].x,strip[i].y);
+	*/
 	double pdis=0,ans = min(d,pdis=get_strip(strip , sz,pmid,Pmid));
 	if(d>pdis)p = pmid,P = Pmid;
 	return ans;
 }
+
 int main()
 {
 	int T;
 	freopen("t.in","r",stdin);
 	scanf("%d",&T);
 	while(T--){
-		scanf("%d",&N);
-		int a,b;
+	//while(~scanf("%d",&N)&&N!=0){
+		double a,b,dis=0;
+		int ok=0,p1,p2;
+		ss.clear();
+
 		for(int i=1;i<=N;i++){
-			scanf("%d%d",&a,&b);
-			pp[i]=Point(a,b);
+			scanf("%lf%lf",&a,&b);
+			pp[i]=Point(a,b,i);
+			if(ss.count(PP(a,b))){
+				p1 = ss[PP(a,b)];
+				p2 = i;ok=1;
+			}
+			else ss[PP(a,b)]=i;
 		}
-		sort(pp+1,pp+1+N,cmpx);
-		int p1,p2;
-		double dis = fd_pair(pp,1,N,p1,p2);
-		printf("dis = %lf: pair (%d ,%d)\n",dis,p1,p2);
+		if(ok==0){
+			sort(pp+1,pp+1+N,cmpx);
+			dis = fd_pair(pp,1,N,p1,p2);
+		}
+		else dis=0;
+		printf("dis = %lf: pair (%d ,%d)\n",dis/2.0,p1,p2);
 	}
 }
-
