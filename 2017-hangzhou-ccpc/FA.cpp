@@ -17,23 +17,23 @@ void get_TF(char *pat)
 	 int len = strlen(pat),lsp=0;
 	 MEM(tf[0],0);//惰性更新,防止爆内存,超时
 	 tf[0][pat[0]]=1;
-	 for(int i=1;i<len;i++){
+	 for(int i=1;i<=len;i++){
 		for(int  j =0;j<maxc;j++)
 			tf[i][j] = tf[lsp][j];
 
 		tf[i][pat[i]] = i+1;
 		//更新失配指针,最后一个字符没有失配指针
-		if(i<len-1)lsp = tf[lsp][pat[i]];
+		if(i<len)lsp = tf[lsp][pat[i]];
 	 }
 }
 void match(char *pat,char *txt)
 {
 	int len =strlen(txt),ps=0;
-	int end = strlen(pat)-1;
+	int end = strlen(pat);
 	for(int i=0;i<len;i++)
 	{
-	   	ps = tf[ps][txt[id]];
-		if(ps==end)printf("get it at ps %d\n",ps);
+	   	ps = tf[ps][txt[i]];
+		if(ps==end)printf("get it at ps %d\n",i);
 	}
 }
 int main()
