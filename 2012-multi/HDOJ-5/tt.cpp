@@ -11,12 +11,12 @@ typedef pair<int,int> PP;
 //const int maxn=;
 //const double esp=1e-6
 
-
+bool ok(int a){return ~a;}
 int main()
 {
-	int a[6]={2,3,1,5,4};
-	nth_element(a,a+3,a+5,[&](int a,int b){return a<b;});
-		printf("here\n");
-	printf("%d\n",a[3]);
+	for(int i=-2;i<2;i++)
+		if(ok(i))printf("%d is 1\n",i);
+		else printf("%d is 0\n",i);
+	printf("%d\n",~1);
 }
 

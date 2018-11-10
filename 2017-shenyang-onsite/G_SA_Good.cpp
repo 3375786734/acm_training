@@ -9,10 +9,11 @@ typedef long long ll;
 typedef pair<int,int> PP;
 //const int maxn=;
 //const double esp=1e-6
-
-
-int main()
+void get_sa()
 {
 	
+}
+int main()
+{
 }
 
