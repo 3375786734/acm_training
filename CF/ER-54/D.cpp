@@ -1,6 +1,6 @@
 /*  -*- coding: utf-8 -*- */
 #include <bits/stdc++.h>
-#define MEM(a,num) (a,num,sizeof(a))
+#define MEM(a,num) mem(a,num,sizeof(a))
 #define rep(i,a,b) for(int i=a;i<=b;i++)
 #define fi first
 #define pb push_back
@@ -10,7 +10,7 @@ typedef long long ll;
 typedef pair<int,int> PP;
 //const double esp=1e-6
 const int maxn=6e5+100;
-const int inf = 1e9;
+const ll inf = 1e18;
 int N,M,K;
 int head[maxn],cur;
 set<PP> ss;
@@ -19,18 +19,25 @@ struct  Eg{
 	int next,to,w,id;
 };
 Eg eg[maxn];
-int pre[maxn],dis[maxn],vis[maxn];
+int vis[maxn];
+ll dis[maxn];
+int ans[maxn],sz;
 void ag(int a,int b,int v,int id)
 {
 	eg[cur]= (Eg){head[a],b,v,id};
 	head[a] = cur++;
 }
 struct Node{
-	int id,dis;
+	int id;
+	ll dis;
 	bool operator<(const Node &a)const{
 		return dis>a.dis;   //大顶堆
 	}
 };
+struct EE{
+	int id,ff;
+};
+EE pre[maxn];
 void dj(int S)
 {
 	for(int i=1;i<=N;i++)
@@ -48,10 +55,19 @@ void dj(int S)
 			if(dis[id]+eg[i].w < dis[to]){
 				dis[to] = dis[id]+eg[i].w;
 				q.push((Node){to,dis[to]});
-				v[to] = eg[i].id;
-				ww[to] =eg[i].w;
+				pre[to] = (EE){eg[i].id,id};
 			}
 		}
+	}
+}
+void dfs(int now,int pre)
+{
+	for(int i=head[now];i!=-1;i=eg[i].next){
+		int to = eg[i].to;
+		if(to == pre)continue;
+		if(sz>=K||sz>=N-1)return ;
+		ans[sz++]  = eg[i].id;
+		dfs(to,now);
 	}
 }
 int main()
@@ -64,21 +80,13 @@ int main()
 		ag(x,y,w,i);ag(y,x,w,i);
 	}
 	dj(1);
-	if(K>=N-1){
-		printf("%d\n",N-1);
-		for(int i=2;i<=N;i++)
-			printf("%d%c",v[i],i==N?'\n':' ');
+	memset(head,-1,sizeof(head));cur=0;
+	rep(i,2,N){
+
+		ag(pre[i].ff,i,0,pre[i].id);
 	}
-	else{
-		printf("%d\n",K);
-		for(int i=2;i<=N;i++)
-			ss.insert(PP(ww[i],v[i]));
-		for(auto si:ss)
-			printf("%d %d\n",si.fi,si.se);
-		int sz= 1;
-		for(auto si :ss){
-			printf("%d%c",si.second,sz==K?'\n':' ');
-			sz++;
-		}
-	}
+	dfs(1,1);
+	printf("%d\n",sz);
+	for(int i=0;i<sz;i++)
+		printf("%d%c",ans[i],i==sz-1?'\n':' ');
 }

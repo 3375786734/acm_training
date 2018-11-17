@@ -23,6 +23,5 @@ int main()
 	for(int i=1;i<=M;i++){
 		scanf("%d%d%d",&a,&b,&c);
 	}
-	printf()
 }
 
