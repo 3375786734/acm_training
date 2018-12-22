@@ -1,0 +1,21 @@
+ the girl touches the boy with the flower
+
+<SENTENCE> -> <NOUN-PHRASE><VERB-PHRASE>
+
+<NOUN-PHRASE> -> <CMPLX-NOUN> | <CMPLX-NOUNihPREP-PHRASE>
+
+<VERB-PHRASE> -> <CMPLX-VERB> | <CMPLX-VERB>PREP-PHRASE>
+
+<PREP-PHRASE> -> <PREP><CMPLX-NOUN>
+
+<CMPLX-NOUN> -> <ARTICLE><NOUN>
+
+<CMPLX-VERB> -> <VERB> | <VERBihNOUN-PHRASE>
+
+<ARTICLE> -> a | the
+
+<NOUN> -> boy | girl | flower
+
+<VERB> -> touches | likes | sees
+
+<PREP> -> with

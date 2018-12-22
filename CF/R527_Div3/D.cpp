@@ -9,14 +9,11 @@ using namespace std;
 typedef long long ll;
 typedef pair<int,int> PP;
 //const double esp=1e-6
-const int maxn = ;
-int N,M;
+const int maxn =; 
+
 
 int main()
 {
-	scanf("%d %d",&N,&M);
-	for(int i=0;i<=N;i++)
-		for(int j=0;j<=M;j++)
-			scanf("%d",&G[i][j]);
-	
+
 }
+
