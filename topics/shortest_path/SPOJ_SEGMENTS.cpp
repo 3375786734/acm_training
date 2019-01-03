@@ -71,10 +71,6 @@ int main()
 		a[i] = (lower_bound(nn,nn+sz,a[i])-nn)*2+1;
 		b[i] = (lower_bound(nn,nn+sz,b[i])-nn)*2;
 	}
-	/*
-	for(int i=0;i<N;i++)
-		printf("%d %d \n",a[i],b[i]);
-	*/
 	int l=0,r= 2*sz-1; 
 	while(l<=r){
 		int mid = (l+r)>>1;

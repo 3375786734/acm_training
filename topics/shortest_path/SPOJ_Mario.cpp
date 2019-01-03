@@ -10,10 +10,16 @@ typedef long long ll;
 typedef pair<int,int> PP;
 //const int maxn=;
 //const double esp=1e-6
-
-
+int N,M;
+char str[maxn][maxn];
 int main()
 {
-	
+	scanf("%d%d",&N,&M);
+	for(int i=0;i<N;i++)
+		scanf("%s",str);
+	for(int i =0;i<N;i++)
+		for(int j =0;j<M;j++)
+			if(str[i][j] =='S')S= PP(i,j);
+			else if(str[])
 }
 
