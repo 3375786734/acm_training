@@ -111,6 +111,6 @@ int main()
 		for(int i=M-1;i>=0;i--)
 			for(int j=0;j<K;j++)
 				printf("%lld%c",ans[i].x[j],j==K-1?'\n':' ');
-	}
+		}
 	}
 }
