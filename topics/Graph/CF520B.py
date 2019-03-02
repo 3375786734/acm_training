@@ -1,10 +1,18 @@
 n,m = map(int,input().split())
-vis = [0 for _ in range(n+1)]
-for x,y  in [map(int,input().split()) for _ in range(m)]:
-    vis[x],vis[y] = 1,1
-print(n-1)
-for i in range(1,n+1):
-    if vis[i]==0:
-        for j in range(1,1+n):
-            if i!=j :print(i,j)
-        break
+maxn = 3e4+1
+lay = [0 for _ in range(int(3e4+1))]
+vis = [0 for _ in range(int(3e4+1))]
+def bfs(now):
+    cnt,head,tail = 0,0,0
+    que = [0 for i in range(int(1e5))]
+    que[tail],tail = now,tail+1
+    while tail>head:
+        fa,head = que[head],head+1
+        if vis[fa] == 1:continue
+        vis[fa] = 1
+        if fa == m: return lay[fa]
+        if fa>0 and fa<3e4:
+            if fa-1>0 :que[tail],tail,lay[fa-1] = fa-1,tail+1,lay[fa]+1
+            if fa*2<3e4 :que[tail],tail,lay[fa*2] = fa*2,tail+1,lay[fa]+1
+    return -1
+print(bfs(n))
