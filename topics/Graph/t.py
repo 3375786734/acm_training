@@ -1,4 +1,2 @@
-q = [1,2,3]
-
-print(q.pop())
-print(q.top())
+p = 1 if 1==2 else 2
+print(p)
