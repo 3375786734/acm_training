@@ -14,6 +14,8 @@ typedef pair<int,int> PP;
 
 int main()
 {
-	printf("%d %d\n",0^0,0^1);
+	vector<int> vv;
+	vv.pb(1);
+	printf("%d\n",vv.size());
 }
 

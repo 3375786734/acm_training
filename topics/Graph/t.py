@@ -1,2 +1,5 @@
-p = 1 if 1==2 else 2
-print(p)
+dic = {}
+dic.setdefault(1,{2}).add(3)
+dic[1].add(3)
+print(dic)
+
