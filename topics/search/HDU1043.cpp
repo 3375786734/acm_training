@@ -8,38 +8,51 @@
 using namespace std;
 typedef long long ll;
 typedef pair<int,int> PP;
-//const double esp=1e-6
-const int maxn = ;
+const int maxn = 3e5;
 char str[maxn],ans[maxn];
+int dist(PP now){
+	
+}
 struct Node{
-	int state[3][3];
-};
-bool inbound(int x,int y){
+	PP id;
+	int g ;
+	bool operator<(const Node &a)const{
+		return dist(id)+g >dist(a)+a.g;
+	}
+}
+bool inbound(PP now){
+	int x = now.fi, y = now.se;
 	return x>=0&&x<3&&y>=0&&y<3;
 }
-int encode(char *str)
+int encode(PP state)
 {
 	
 }
-char * decode(int code)
+PP decode(int now)
 {
-
+	
 }
-void a_star()
+void a_star(PP ss)
 {
-	priority_queue<int> q;
+	priority_queue<PP,vector<int>,cmp> q;
+	q.push(ss)
 	while(!q.empty())
 	{
-		int fa = q.top();q.pop();
+		PP fa = q.top();q.pop();
 		for(int i=0;i<4;i++){
-			
+			PP tmp = PP(fa.fi+dx[i],fa.se+dy[i]);
+			if(in_bound(tmp)&&vis[encode(tmp)])continue;
+			q.push(encode(tmp));
 		}
 	}
 }
 int main()
 {
 	while(~scanf("%s",str)){
-		a_star();
+		PP ss ;
+		for(int i=0;i<strlen(str);i++)
+		  if(str[i]== 'x')ss = PP();
+		a_star(ss);
 		for(int i=0;i<anssz;i++)
 		  print("%c",ans[i]);
 		printf("\n");

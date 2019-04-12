@@ -12,6 +12,7 @@ def dfs():
         if fa in vis:continue
         vis.add(fa)
         col.clear()
+        col.add(ans[fa])
         for i in eg[fa]:
             if i in vis:col.add(ans[i])
         for i in eg[fa]:
@@ -19,6 +20,7 @@ def dfs():
                 ans[i] = ans[fa]
                 while ans[i] in col: ans[i] = (ans[i]+1)%cnt
                 col.add(ans[i])
+                q.append(i)
 print(cnt)
 dfs()
 for i in range(1,n+1):ans[i] += 1
