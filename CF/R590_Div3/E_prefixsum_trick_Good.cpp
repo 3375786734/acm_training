@@ -39,4 +39,3 @@ int main()
 		printf("%d%c",ans-cnt[i] +res[i] ,i==N?'\n':' ');
 	}
 }
-
